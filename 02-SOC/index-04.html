@@ -32,24 +32,42 @@
 			this.da = 0;
 			this.tax = 0;
 			this.salary = 0;
+
+			this.onSalaryChange = null;
 		}
 		//behavior
 		SalaryCalculatorModel.prototype.calculate = function() {
 			var gross = this.basic + this.hra + this.da;
 			var net = gross * ((100-this.tax)/100);
 			this.salary = net;
+			if (typeof this.onSalaryChange === 'function')
+				this.onSalaryChange();
 		};
 
 		//View
 		$(function(){
-			var model = new SalaryCalculatorModel();
+			window.model = new SalaryCalculatorModel();
+
+			$('#txtBasic').change(function(){
+				model.basic = $('#txtBasic').val().toInt();
+			});
+
+			$('#txtHra').change(function(){
+				model.hra = $('#txtHra').val().toInt();
+			});
+
+			$('#txtDa').change(function(){
+				model.da = $('#txtDa').val().toInt();
+			});
+
+			$('#rangeTax').change(function(){
+				model.tax = $('#rangeTax').val().toInt();
+			});
+
 
 			$('#btnCalculate').click(function(){
 				
-				model.basic = $('#txtBasic').val().toInt();
-				model.hra = $('#txtHra').val().toInt();
-				model.da = $('#txtDa').val().toInt();
-				model.tax = $('#rangeTax').val().toInt();
+				
 
 				model.calculate();
 
@@ -57,8 +75,12 @@
 				$('#tdHra').html(model.hra);
 				$('#tdDa').html(model.da);
 				$('#tdTax').html(model.tax);
-				$('#tdSalary').html(model.salary);
+				
 			});
+
+			model.onSalaryChange = function(){
+				$('#tdSalary').html(model.salary);
+			};
 		});
 	</script>
 	<!-- basic + hra + da - tax -->
