@@ -219,7 +219,6 @@
 
 		class BugTracker extends React.Component{
 			render(){
-				console.log(this.props);
 				let { bugs, addNew, toggle, removeClosed, sort } = this.props;
 				return(
 					<div>
@@ -270,8 +269,9 @@
 
 		let ConnectedBugTracker = (function(){
 			function mapStateToBugTrackerProps(storeState){
-				let bugs = storeState.bugsData;
-				return { bugs : bugs };
+				let bugs = storeState.bugsData,
+					spinnerValue = storeState.spinnerData;
+				return { bugs : bugs.filter((bug, index) => index % 2 === spinnerValue % 2)};
 			}
 			function mapDispatchToBugTrackerProps(dispatch){
 				let bugActions = Redux.bindActionCreators(bugActionCreators, dispatch);
