@@ -60,6 +60,11 @@
 				let newState = [...currentState, newBug];
 				return newState;
 			}
+			if (action.type === 'UPDATE'){
+				let {oldBug, newBug} = action.payload;
+				let newState = currentState.map(bug => bug === oldBug ? newBug : bug);
+				return newState;
+			}
 			return currentState;
 		}
 
@@ -70,6 +75,11 @@
 					isClosed : false
 				};
 				let action = { type : 'ADD_NEW', payload : newBug };
+				return action;
+			},
+			toggle(bugToToggle){
+				let toggledBug = { ...bugToToggle, isClosed : !bugToToggle.isClosed};
+				let action = { type : 'UPDATE' , payload : {oldBug : bugToToggle, newBug : toggledBug}};
 				return action;
 			}
 		}
@@ -84,14 +94,15 @@
 			}
 
 			render(){
-				let bugs = this.props.bugs,
+				let { bugs, toggle } = this.props,
+					closedCount = bugs.reduce((result, bug) => bug.isClosed ? ++result : result, 0),
 					bugItems = bugs.map((bug, index) => (
-						<BugItem model={bug} key={index} />
+						<BugItem model={bug} key={index} toggle={toggle}/>
 					))
 				return(
 					<div>
 						<section className="stats">
-							<span className="closed">1</span>
+							<span className="closed">{closedCount}</span>
 							<span> / </span>
 							<span>{bugs.length}</span>
 						</section>
@@ -122,7 +133,8 @@
 
 		class BugItem extends React.Component{
 			onBugNameClick = () => {
-				console.log('bugName is clicked', this.props.model);
+				let { model , toggle } = this.props;
+				toggle(model);
 			}
 			render(){
 				let bug = this.props.model;
