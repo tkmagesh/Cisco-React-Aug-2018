@@ -65,6 +65,11 @@
 				let newState = currentState.map(bug => bug === oldBug ? newBug : bug);
 				return newState;
 			}
+			if (action.type === 'REMOVE'){
+				let closedBugs = action.payload;
+				let newState = currentState.filter(bug => closedBugs.indexOf(bug) === -1);
+				return newState;
+			}
 			return currentState;
 		}
 
@@ -72,7 +77,8 @@
 			addNew(bugName){
 				let newBug = { 
 					name : bugName,
-					isClosed : false
+					isClosed : false,
+					createdAt : new Date()
 				};
 				let action = { type : 'ADD_NEW', payload : newBug };
 				return action;
@@ -80,6 +86,11 @@
 			toggle(bugToToggle){
 				let toggledBug = { ...bugToToggle, isClosed : !bugToToggle.isClosed};
 				let action = { type : 'UPDATE' , payload : {oldBug : bugToToggle, newBug : toggledBug}};
+				return action;
+			},
+			removeClosed(bugs){
+				let closedBugs = bugs.filter(bug => bug.isClosed);
+				let action = { type : 'REMOVE', payload : closedBugs};
 				return action;
 			}
 		}
@@ -94,7 +105,7 @@
 			}
 
 			render(){
-				let { bugs, toggle } = this.props,
+				let { bugs, toggle, removeClosed } = this.props,
 					closedCount = bugs.reduce((result, bug) => bug.isClosed ? ++result : result, 0),
 					bugItems = bugs.map((bug, index) => (
 						<BugItem model={bug} key={index} toggle={toggle}/>
@@ -124,7 +135,7 @@
 							<ol>
 								{bugItems}
 							</ol>
-							<input type="button" value="Remove Closed" onClick={() => {}} />
+							<input type="button" value="Remove Closed" onClick={() => {removeClosed(bugs)}} />
 						</section>
 					</div>
 				)
@@ -137,14 +148,14 @@
 				toggle(model);
 			}
 			render(){
-				let bug = this.props.model;
+				let bug = this.props.model,
+					bugStyle = 'bugname ' + (bug.isClosed ? 'closed' : '');
 				return(
 					<li>
-						<span className="bugname" onClick={this.onBugNameClick}>
+						<span className={bugStyle} onClick={this.onBugNameClick}>
 							{bug.name}
 						</span>
-						<div>[ {bug.isClosed.toString() } ]</div>
-						<div className="datetime">[Created At]</div>
+						<div className="datetime">{bug.createdAt.toString()}</div>
 					</li>
 				)
 			}
