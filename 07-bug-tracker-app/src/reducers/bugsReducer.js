@@ -5,6 +5,9 @@ let initialBugState = {
 };
 
 function bugsReducer(currentState = initialBugState, action){
+	if (action.type === 'LOADED'){
+		return { ...currentState, bugs : action.payload };
+	}
 	if (action.type === 'ADD_NEW'){
 		let newBug = action.payload;
 		let newState = { ...currentState, bugs : [...currentState.bugs, newBug] };
@@ -16,8 +19,8 @@ function bugsReducer(currentState = initialBugState, action){
 		return newState;
 	}
 	if (action.type === 'REMOVE'){
-		let closedBugs = action.payload;
-		let newState = { ...currentState , bugs : currentState.bugs.filter(bug => closedBugs.indexOf(bug) === -1) };
+		let closedBug = action.payload;
+		let newState = { ...currentState , bugs : currentState.bugs.filter(bug => bug.id !== closedBug.id) };
 		return newState;
 	}
 	if (action.type === 'SORT'){

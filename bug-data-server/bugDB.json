@@ -1,16 +1,10 @@
 {
   "bugs": [
     {
-      "id": 1,
-      "name": "User actions not recognized",
+      "id": 3,
+      "name": "Data integrity checks failed",
       "isClosed": false,
-      "createdAt": "2018-07-27T06:28:27.157Z"
-    },
-    {
-      "id": 2,
-      "name": "Application is not responding",
-      "isClosed": false,
-      "createdAt": "2018-08-08T10:01:44.781Z"
+      "createdAt": "2018-08-13T09:54:38.265Z"
     }
   ],
   "projects": [
