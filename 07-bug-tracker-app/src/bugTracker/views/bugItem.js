@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class BugItem extends Component{
 	onBugNameClick = () => {
@@ -14,6 +15,7 @@ class BugItem extends Component{
 					{bug.name}
 				</span>
 				<div className="datetime">{bug.createdAt.toString()}</div>
+				<Link to="/">More...</Link>
 			</li>
 		)
 	}

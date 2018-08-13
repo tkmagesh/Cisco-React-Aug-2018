@@ -14,7 +14,7 @@ class BugTracker extends Component{
 		this.props.load();
 	}
 	render(){
-		let { bugs, addNew, toggle, removeClosed, sort, load } = this.props;
+		let { bugs, addNew, toggle, removeClosed, sort } = this.props;
 		return(
 			<div>
 				<BugStats bugs={bugs} />

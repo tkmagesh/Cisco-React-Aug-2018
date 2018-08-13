@@ -8,22 +8,29 @@ import Spinner from './spinner';
 import BugTracker from './bugTracker';
 import appStore from './store';
 
-
-import axios from 'axios';
-
-/*var p = axios.get('http://localhost:3030/bugs');
-var p2 = p.then(function(response){
-	return response.data;
-});
-p2.then(function(bugs){
-	console.table(bugs);
-});*/
-
-axios.get('http://localhost:3030/bugs')
-	.then(response => response.data)
-	.then(bugs => console.table(bugs));
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 ReactDOM.render(
+	<Provider store={appStore}>
+		<Router>
+			<div>
+				<p>
+				<Link to="/">Bug Tracker</Link>
+				<br/>
+				<Link to="/spinner">Spinner</Link>
+				<br />
+				</p>
+			  <Route exact path="/" component={BugTracker} />
+		      <Route path="/bugs" component={BugTracker} />
+		      <Route path="/spinner" component={Spinner} />
+		    </div> 
+	    </Router>
+	</Provider>
+	, document.getElementById('root')
+);
+
+
+/*ReactDOM.render(
 	<Provider store={appStore}>
 		<div>
 			<Spinner/>
@@ -32,5 +39,5 @@ ReactDOM.render(
 		</div>
 	</Provider>,
 	document.getElementById('root')
-);
+);*/
 registerServiceWorker();
